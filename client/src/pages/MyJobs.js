@@ -26,7 +26,7 @@ const MyJobs = () => {
     if(jobName.length < 5){
       NotNameToShort();
     }else{
-      Axios.post("http://localhost:3001/createJob", {
+      Axios.post("https://localhost:3001/createJob", {
         name: jobName,
         description: jobDescription,
         creator: loggedInUser,

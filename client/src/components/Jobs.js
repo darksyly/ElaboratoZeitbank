@@ -6,31 +6,32 @@ import toast from 'react-hot-toast';
 
 const NotJobDeleted = () => toast.success("Job deleted");
 const NotJobTake = () => toast.success("Job Accepted");
+const NotJobDrop = () => toast.success("Job Rejected");
 
 const Jobs = ({user, filter, infoCreate}) => {
 
-    var loggedInUser = "phillip";
+    var loggedInUser = "sepp";
 
     const [allJobs, setJobs] = useState([]);
     const [filteredJobs, setfilteredJobs] = useState([]); 
 
     const getJobs = () => {
       if(user === "created"){
-        Axios.post("http://localhost:3001/getCreatedJobs", {
+        Axios.post("https://localhost:3001/getCreatedJobs", {
             name: loggedInUser,
           }).then((response) => {
           console.log(response);
           setJobs(response.data);
         });
       }else if (user === "processed"){
-        Axios.post("http://localhost:3001/getProcessedJobs", {
+        Axios.post("https://localhost:3001/getProcessedJobs", {
             name: loggedInUser,
           }).then((response) => {
           console.log(response);
           setJobs(response.data);
         });
       }else{
-        Axios.get("http://localhost:3001/getAllJobs", {})
+        Axios.get("https://localhost:3001/getAllJobs", {})
         .then((response) => {
           console.log(response);
           setJobs(response.data);
@@ -43,7 +44,7 @@ const Jobs = ({user, filter, infoCreate}) => {
     }, [infoCreate])
 
     const takeJob = (id) => {
-      Axios.post("http://localhost:3001/takeJob", {
+      Axios.post("https://localhost:3001/takeJob", {
         name: loggedInUser,
         id: id
       }).then((response) => {
@@ -54,7 +55,7 @@ const Jobs = ({user, filter, infoCreate}) => {
     };
   
     const deleteJob = (id) => {
-      Axios.post("http://localhost:3001/deleteJob", {
+      Axios.post("https://localhost:3001/deleteJob", {
         id: id
       }).then((response) => {
         console.log(response);
@@ -64,7 +65,7 @@ const Jobs = ({user, filter, infoCreate}) => {
     };
 
     const finishJob = (id) => {
-      Axios.post("http://localhost:3001/finishJob", {
+      Axios.post("https://localhost:3001/finishJob", {
         id: id
       }).then((response) => {
         console.log(response);
@@ -73,10 +74,11 @@ const Jobs = ({user, filter, infoCreate}) => {
     };
 
     const dropJob = (id) => {
-      Axios.post("http://localhost:3001/dropJob", {
+      Axios.post("https://localhost:3001/dropJob", {
         id: id
       }).then((response) => {
         console.log(response);
+        NotJobDrop();
         getJobs();
       });
     };
