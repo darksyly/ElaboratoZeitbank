@@ -15,7 +15,7 @@ const AllJobs = () => {
           <div className="absolute top-4 right-3"> <i className="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
         </div>
         
-        <Jobs name = "" filter = {filter}></Jobs>
+        <Jobs version = "1" filter = {filter}></Jobs>
       </div>  
     );
 };

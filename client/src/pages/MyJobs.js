@@ -1,16 +1,16 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import Jobs from '../components/Jobs';
 import Axios from 'axios';
 import toast from 'react-hot-toast';
+import Popup from '../components/Popup'
 
 const NotJobCreated = () => toast.success("New Job created");
-
 const NotNameToShort = () => toast.error("Invalid input");
 
 const MyJobs = () => {
-  const [filter, setFilter] = useState('');
 
-  var loggedInUser = "phillip";
+  const [filter, setFilter] = useState('');
+  const [loggedInUser, setLoggedInUser] = useState('');
 
   const [jobName, setJobName] = useState();
   const [jobDescription, setJobDescription] = useState();
@@ -18,8 +18,15 @@ const MyJobs = () => {
 
   const [infoCreate, setInfoCreate] = useState(false);
 
-  const createJob = () => {
+  useEffect(() => {
+    Axios.get("https://localhost:3001/login").then((response) => {
+      if (response.data.loggedIn === true) {
+        setLoggedInUser(response.data.user[0].username);
+      }
+    });
+  }, []);
 
+  const createJob = () => {
 
     console.log(jobName + jobName.length)
 
@@ -40,19 +47,17 @@ const MyJobs = () => {
   };
 
     return (
-      <div>
+      <div className="">
 
-        <div className="bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 flex flex-wrap overflow-hidden p-3">
+        <div className=" flex flex-wrap overflow-hidden p-3">
         <div className="w-1/6 overflow-hidden">
         <input type="text" className="h-14 pr-8 pl-5 rounded z-0 focus:shadow focus:outline-none" placeholder="Search ..." value={filter} onChange={event => setFilter(event.target.value)}></input>
         <div className="absolute top-4 right-3"> <i className="fa fa-search text-gray-400 z-20 hover:text-gray-500"></i> </div>
-        
         </div>
         <div className="w-1/6 overflow-hidden">
-
         </div>
         <div className="w-1/6 overflow-hidden">
-          <input className="shadow appearance-none border rounded py-2 px-3 text-grey-darker h-full w-full"  type="text"
+          <input className="shadow appearance-none border rounded py-2 px-3 text-grey-darker h-full w-full"
             placeholder="hours"
             type="number"
             step={0.25}
@@ -89,11 +94,11 @@ const MyJobs = () => {
         <div className="flex items-center justify-center">
           <h1>YOUR JOBS</h1>
         </div>
-        <Jobs user = "created" filter = {filter} infoCreate = {infoCreate}></Jobs>
+        <Jobs version="2" filter = {filter} infoCreate = {infoCreate}></Jobs>
         <div className="flex items-center justify-center mt-7">
           <h1>PROCESSING...</h1>
         </div>
-        <Jobs user = "processed" filter = {filter} infoCreate = {infoCreate}></Jobs>
+        <Jobs version="3" filter = {filter} infoCreate = {infoCreate}></Jobs>
       </div>  
     );
 };

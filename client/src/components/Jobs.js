@@ -1,29 +1,38 @@
 import React, { useEffect, useState } from "react";
 import Job from './Job';
 import Axios from 'axios'
-
 import toast from 'react-hot-toast';
+
+Axios.defaults.withCredentials = true;
 
 const NotJobDeleted = () => toast.success("Job deleted");
 const NotJobTake = () => toast.success("Job Accepted");
 const NotJobDrop = () => toast.success("Job Rejected");
 
-const Jobs = ({user, filter, infoCreate}) => {
-
-    var loggedInUser = "sepp";
+const Jobs = ({version, filter, infoCreate}) => {
 
     const [allJobs, setJobs] = useState([]);
     const [filteredJobs, setfilteredJobs] = useState([]); 
 
+    const [loggedInUser, setLoggedInUser] = useState("");
+
+    useEffect(() => {
+      Axios.get("https://localhost:3001/login").then((response) => {
+        if (response.data.loggedIn === true) {
+          setLoggedInUser(response.data.user[0].username);
+        }
+      });
+    }, []);
+
     const getJobs = () => {
-      if(user === "created"){
+      if(version === "2"){
         Axios.post("https://localhost:3001/getCreatedJobs", {
             name: loggedInUser,
           }).then((response) => {
           console.log(response);
           setJobs(response.data);
         });
-      }else if (user === "processed"){
+      }else if (version === "3"){
         Axios.post("https://localhost:3001/getProcessedJobs", {
             name: loggedInUser,
           }).then((response) => {
@@ -40,8 +49,8 @@ const Jobs = ({user, filter, infoCreate}) => {
     };
 
     useEffect(() => {
-      getJobs();
-    }, [infoCreate])
+        getJobs();
+    }, [infoCreate, loggedInUser])
 
     const takeJob = (id) => {
       Axios.post("https://localhost:3001/takeJob", {
@@ -91,10 +100,6 @@ const Jobs = ({user, filter, infoCreate}) => {
         }
         filterJobs();
     },[filter, allJobs])
-
-    useEffect(() => {
-      getJobs();
-    }, [])
 
   return(
     <div className="flex flex-col">

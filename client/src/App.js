@@ -5,9 +5,9 @@ import MyJobs from './pages/MyJobs';
 import Home from './pages/Home';
 import AllJobs from './pages/AllJobs';
 import Navbar from './components/Navbar';
-import Login from './pages/Login';
 import { Toaster } from 'react-hot-toast';
 import Registration from './pages/Registration';
+import Login from './pages/Login';
 
 function App() {
 
@@ -18,9 +18,9 @@ function App() {
           <Switch>
             <Route path='/' exact component={Home}/>
             <Route path='/jobs' component={AllJobs} />
-            <Route path='/login' component={Login} />
             <Route path='/myjobs' component={MyJobs} />
             <Route path='/reg' component={Registration} />
+            <Route path='/login' component={Login} />
           </Switch>
         </Router>
     );
