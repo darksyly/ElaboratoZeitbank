@@ -50,8 +50,14 @@ export default function Registration() {
           <hr />
           <input onChange={(e) => {
             setUsernameReg(e.target.value);
-          }} type="text" placeholder="Name" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+          }} type="text" placeholder="Username" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
           <input onChange={(e) => {
+            setUsernameReg(e.target.value);
+          }} type="text" placeholder="Email" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+          <input onChange={(e) => {
+            setUsernameReg(e.target.value);
+          }} type="text" placeholder="Commune" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+                    <input onChange={(e) => {
             setPasswordReg(e.target.value);
           }} type="password" placeholder="Password" className="mb-1 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
           <a className="text-red-600 text-center">{regStatus}</a>

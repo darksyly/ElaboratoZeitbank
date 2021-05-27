@@ -153,7 +153,6 @@ app.get("/getAllJobs", (req, res) =>{
             res.send({err:err});
         }
         if(result.length > 0){
-            console.log("GET JOBS : " + result)
             res.send(result)
         }else{
             res.send({message:"no job"})
@@ -187,12 +186,27 @@ app.post("/getProcessedJobs", (req, res) =>{
             res.send({err:err});
         }
         if(result.length > 0){
-            console.log("GET JOBS : " + result)
             res.send(result)
         }else{
             res.send({message:"no job"})
         }
     });
+})
+
+app.post("/getUserRatings", (req, res) =>{
+
+  const name = req.body.name;
+
+  db.query("SELECT rating FROM rating r, users u WHERE u.username = r.username AND u.username = ?", name, (err, result) =>{
+      if(err){
+          res.send({err:err});
+      }
+      if(result.length > 0){
+          res.send(result)
+      }else{
+          res.send({message:"no rating"})
+      }
+  });
 })
 
 app.post("/takeJob", (req, res) =>{
@@ -228,6 +242,7 @@ app.post("/dropJob", (req, res) =>{
 app.post("/finishJob", (req, res) =>{
 
     const id = req.body.id;
+    const rating = req.body.rating;
 
     var creator;
     var processor;
@@ -243,7 +258,7 @@ app.post("/finishJob", (req, res) =>{
             creator = result[0].creator
             processor = result[0].processor
             hours = result[0].hours
-            transaction(hours, processor, creator);
+            transaction(hours, processor, creator, rating);
         }
     });
 
@@ -253,10 +268,21 @@ app.post("/finishJob", (req, res) =>{
         }else{
             res.send({message:"finished"})
         }
-    });
+    });    
 })
 
-function transaction(hours, processor, creator) { 
+function transaction(hours, processor, creator, rating) { 
+
+  console.log("rating processor:" + processor)
+  console.log("rating rating:" + rating)
+  db.query("INSERT INTO zeitbankdb.rating (username, rating) VALUES (?, ?)", [processor, rating], (err, result) =>{
+    if(err){
+        console.error("sql error")
+    }else{
+        console.log("rating done")
+    }
+  })
+
     db.query("UPDATE users SET hours = hours + '"+hours+"' WHERE username = ?", processor, (err, result) =>{
         if(err){
             res.send({err:err});

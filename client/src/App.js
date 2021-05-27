@@ -8,6 +8,7 @@ import Navbar from './components/Navbar';
 import { Toaster } from 'react-hot-toast';
 import Registration from './pages/Registration';
 import Login from './pages/Login';
+import Profile from './pages/Profile';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
             <Route path='/myjobs' component={MyJobs} />
             <Route path='/reg' component={Registration} />
             <Route path='/login' component={Login} />
+            <Route path='/profile' component={Profile} />
           </Switch>
         </Router>
     );

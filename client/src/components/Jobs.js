@@ -9,10 +9,10 @@ const NotJobDeleted = () => toast.success("Job deleted");
 const NotJobTake = () => toast.success("Job Accepted");
 const NotJobDrop = () => toast.success("Job Rejected");
 
-const Jobs = ({version, filter, infoCreate}) => {
+const Jobs = ({version, filter, infoCreate, rating}) => {
 
     const [allJobs, setJobs] = useState([]);
-    const [filteredJobs, setfilteredJobs] = useState([]); 
+    const [filteredJobs, setfilteredJobs] = useState([]);
 
     const [loggedInUser, setLoggedInUser] = useState("");
 
@@ -29,20 +29,17 @@ const Jobs = ({version, filter, infoCreate}) => {
         Axios.post("https://localhost:3001/getCreatedJobs", {
             name: loggedInUser,
           }).then((response) => {
-          console.log(response);
           setJobs(response.data);
         });
       }else if (version === "3"){
         Axios.post("https://localhost:3001/getProcessedJobs", {
             name: loggedInUser,
           }).then((response) => {
-          console.log(response);
           setJobs(response.data);
         });
       }else{
         Axios.get("https://localhost:3001/getAllJobs", {})
         .then((response) => {
-          console.log(response);
           setJobs(response.data);
         });
       }
@@ -74,8 +71,10 @@ const Jobs = ({version, filter, infoCreate}) => {
     };
 
     const finishJob = (id) => {
+      console.log("Rating:" + rating)
       Axios.post("https://localhost:3001/finishJob", {
-        id: id
+        id: id,
+        rating: rating
       }).then((response) => {
         console.log(response);
         getJobs();

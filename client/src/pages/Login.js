@@ -39,7 +39,7 @@ export default function Registration() {
   }, []);
 
   return(
-    <div className="p-20  min-h-screen w-screen flex flex-col-reverse md:flex-row items-center justify-center bg-gray-200">
+    <div className="p-20  min-h-screen w-screen flex flex-col-reverse md:flex-row items-center justify-center bg-fixed">
       <div className="content text-3xl text-center md:text-left">
         <h1 className="text-5xl text-blue-500 font-bold mb-5">Zeitbank</h1>
         <p>Login to use all cool Features the Site has to offer</p>
@@ -50,7 +50,7 @@ export default function Registration() {
           <hr />
           <input onChange={(e) => {
             setUsername(e.target.value);
-          }} type="text" placeholder="Name" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+          }} type="mail" placeholder="Name" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
           <input onChange={(e) => {
             setPassword(e.target.value);
           }} type="password" placeholder="Password" className="mb-1 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />

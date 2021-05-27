@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react"
 import Axios from "axios"
 import { Link } from 'react-router-dom';
+import { useHistory } from "react-router-dom";
+
 const Navbar = () => {
 
   const [loginStatus, setLoginStatus] = useState("");
   const [hours, setHours] = useState("");
+  let history = useHistory();
 
   useEffect(() => {
     Axios.get("https://localhost:3001/login", {withCredentials: true}).then((response) => {
@@ -17,8 +20,9 @@ const Navbar = () => {
 
   const logout = () => {
     console.log("logout")
-    //document.cookie = 'userid=; Max-Age=-99999999;'; 
-    //localStorage.clear()
+    document.cookie = 'userId=; Max-Age=-99999999;'; 
+    localStorage.clear()
+    history.push("/login");
   };
 
 return(
@@ -46,9 +50,9 @@ return(
       {loginStatus ? 
       <>
         <li className="md:ml-4">
-          <a className="border-t block no-underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0">
-            {loginStatus}
-          </a>
+          <Link to="/profile">
+          {loginStatus}
+          </Link>
         </li>
         <li className="md:ml-4">
           <a className="border-t block no-underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0">
