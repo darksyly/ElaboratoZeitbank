@@ -50,17 +50,12 @@ return(
       {loginStatus ? 
       <>
         <li className="md:ml-4">
-          <Link to="/profile">
-          {loginStatus}
+          <Link className="border-t block no-underline hover:underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0" to="/profile">
+            {loginStatus}
           </Link>
         </li>
-        <li className="md:ml-4">
-          <a className="border-t block no-underline py-2 text-grey-darkest hover:text-black md:border-none md:p-0">
-            {hours}
-          </a>
-        </li>
         <li>
-          <button onClick={logout} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded h-full w-full flex items-center justify-"> 
+          <button onClick = {logout} className="bg-transparent hover:bg-blue-500 text-blue-700 font-semibold hover:text-white py-2 px-4 border border-blue-500 hover:border-transparent rounded h-full w-min-full flex items-center"> 
               logout
           </button>
         </li>

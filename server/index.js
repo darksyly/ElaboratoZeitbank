@@ -28,14 +28,14 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(
   session({
     key: "userId",
-    secret: "subscribe",
+    secret: "Okumoeige9abnzhRIGe6gqhxPkrvLT",
     resave: false,
     saveUninitialized: false,
     cookie: {
         sameSite: "none",
         secure: true,
         httpOnly: false,
-      expires: 1000*60*60*24,
+      expires: 86400000, //1 day
     },
   })
 );
@@ -52,6 +52,9 @@ app.post("/register", (req, res) => {
   const username = req.body.username;
   const password = req.body.password;
 
+  const email = req.body.email;
+  const confirmation = req.body.confirmation;
+
   db.query(
     "SELECT * FROM users WHERE username = ?;",
     username,
@@ -65,8 +68,12 @@ app.post("/register", (req, res) => {
 
         if(username.length < 3){
             res.send({message: 'Username needs at least 3 characters'});
+        }else if(!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
+            res.send({message: 'email not valid'});
         }else if(password.length < 8){
             res.send({message: 'Password needs at least 8 characters'});
+        }else if(password !== confirmation){
+            res.send({message: 'Password and Confirmation don\'t match'});
         }else{
 
         bcrypt.hash(password, saltRounds, (err, hash) => {
@@ -74,8 +81,8 @@ app.post("/register", (req, res) => {
               console.log(err);
             }
             db.query(
-              "INSERT INTO users (username, password, hours) VALUES (?,?,?)",
-              [username, hash, 10],
+              "INSERT INTO users (username, password, hours, email) VALUES (?,?,?,?)",
+              [username, hash, 10, email],
               (err, result) => {
                 console.log(err);
               }
@@ -102,9 +109,7 @@ app.post("/login", (req, res) => {
   const password = req.body.password;
 
   db.query(
-    "SELECT * FROM users WHERE username = ?;",
-    username,
-    (err, result) => {
+    "SELECT * FROM users WHERE username = ?;", username, (err, result) => {
       if (err) {
         res.send({ err: err });
       }
@@ -128,6 +133,31 @@ app.post("/login", (req, res) => {
 
 //------------------------------------------------------------------------------------------------------------------
 
+app.post("/email", (req, res) => {
+  const username = req.body.username;
+
+  db.query(
+    "SELECT email FROM users WHERE username = ?;", username, (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      res.send(result);
+      console.log(result);
+  });
+})
+
+app.post("/hours", (req, res) => {
+  const username = req.body.username;
+
+  db.query(
+    "SELECT hours FROM users WHERE username = ?;", username, (err, result) => {
+      if (err) {
+        res.send({ err: err });
+      }
+      res.send(result);
+      console.log(result);
+  });
+})
 
 app.post("/createJob", (req, res) =>{
 
@@ -197,11 +227,14 @@ app.post("/getUserRatings", (req, res) =>{
 
   const name = req.body.name;
 
-  db.query("SELECT rating FROM rating r, users u WHERE u.username = r.username AND u.username = ?", name, (err, result) =>{
+  console.log("User rating name : " + name)
+
+  db.query("SELECT rating FROM zeitbankdb.rating r, zeitbankdb.users u WHERE u.username = r.username AND u.username = ?", name, (err, result) =>{
       if(err){
           res.send({err:err});
       }
       if(result.length > 0){
+        console.log(result)
           res.send(result)
       }else{
           res.send({message:"no rating"})
@@ -228,8 +261,9 @@ app.post("/takeJob", (req, res) =>{
 app.post("/dropJob", (req, res) =>{
 
     const id = req.body.id;
+    console.log("Server drop Job with ID:" + id)
 
-    db.query("UPDATE jobs SET processor = '" + "" + "' WHERE jobs.id = ?", id, (err, result) =>{
+    db.query("UPDATE jobs SET processor = " + null + " WHERE id = ?;", id, (err, result) =>{
         if(err){
             res.send({err:err});
         }else{
@@ -237,7 +271,6 @@ app.post("/dropJob", (req, res) =>{
         }
     });
 })
-
 
 app.post("/finishJob", (req, res) =>{
 
@@ -282,7 +315,6 @@ function transaction(hours, processor, creator, rating) {
         console.log("rating done")
     }
   })
-
     db.query("UPDATE users SET hours = hours + '"+hours+"' WHERE username = ?", processor, (err, result) =>{
         if(err){
             res.send({err:err});

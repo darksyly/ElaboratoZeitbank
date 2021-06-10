@@ -6,6 +6,8 @@ import toast from 'react-hot-toast';
 export default function Registration() {
   const [usernameReg, setUsernameReg] = useState("");
   const [passwordReg, setPasswordReg] = useState("");
+  const [confirmation, setConfirmation] = useState("");
+  const [email, setEmail] = useState("");
 
   const NotUserCreated = () => toast.success("User created");
 
@@ -18,6 +20,8 @@ export default function Registration() {
     Axios.post("https://localhost:3001/register", {
       username: usernameReg,
       password: passwordReg,
+      email: email,
+      confirmation: confirmation
     }).then((response) => {
       console.log(response);
       if (response.data.message) {
@@ -28,14 +32,6 @@ export default function Registration() {
       }
     });
   };
-
-  useEffect(() => {
-    Axios.get("https://localhost:3001/login").then((response) => {
-      if (response.data.loggedIn === true) {
-        //setLoginStatus(response.data.user[0].username);
-      }
-    });
-  }, []);
 
   return(
     <div className="p-20 min-h-screen w-screen flex flex-col-reverse md:flex-row items-center justify-center bg-gray-200">
@@ -52,14 +48,15 @@ export default function Registration() {
             setUsernameReg(e.target.value);
           }} type="text" placeholder="Username" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
           <input onChange={(e) => {
-            setUsernameReg(e.target.value);
+            setEmail(e.target.value);
           }} type="text" placeholder="Email" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
           <input onChange={(e) => {
-            setUsernameReg(e.target.value);
-          }} type="text" placeholder="Commune" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
-                    <input onChange={(e) => {
             setPasswordReg(e.target.value);
-          }} type="password" placeholder="Password" className="mb-1 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+          }} type="password" placeholder="Password" className="mb-2 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+          <input onChange={(e) => {
+            setConfirmation(e.target.value);
+          }} type="password" placeholder="Confirmation" className="mb-3 py-3 px-4 border border-gray-400 focus:outline-none rounded-md focus:ring-1 ring-cyan-500" />
+
           <a className="text-red-600 text-center">{regStatus}</a>
           <button onClick={register} className="w-full bg-blue-500  mb-4 text-white p-3 rounded-lg font-semibold text-lg mt-1">Create New Account</button>
         </form>

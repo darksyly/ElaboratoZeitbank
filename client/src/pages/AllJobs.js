@@ -28,10 +28,10 @@ const AllJobs = () => {
     );
   }else{
     return(
-      <div className="flex align-center justify-center">
+      <div className="flex align-center justify-center min-h-screen">
         <h1>Log in to see this page</h1>
       <Link to="/login">
-        <button className="bg-blue-500 hover:bg-white text-white font-semibold hover:text-blue-700 py-2 px-4 border border-blue-500 hover:border-blue-500 rounded h-full w-full flex items-center justify-center"> 
+        <button className="bg-blue-500 hover:bg-white text-white font-semibold hover:text-blue-700 py-2 px-4 border border-blue-500 hover:border-blue-500 rounded  w-full flex items-center justify-center"> 
           Login
         </button>
       </Link>

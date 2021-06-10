@@ -82,6 +82,7 @@ const Jobs = ({version, filter, infoCreate, rating}) => {
     };
 
     const dropJob = (id) => {
+      console.log("drop Job with ID:" + id)
       Axios.post("https://localhost:3001/dropJob", {
         id: id
       }).then((response) => {
